@@ -50,14 +50,9 @@ that nature.
 2. (Optional) If you installed gvm, create golang pkgset specifically for this project:
 
    ```bash
-   mkdir "${HOME}/go"
-   GVM_BIN="${HOME}/.gvm/scripts/gvm"
-   export GOPATH="${HOME}/go"
    VERSION='1.18'
    PROJECT=goproject
 
-   bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
-   source $GVM_BIN
    gvm install "go${VERSION}"
    gvm use "go${VERSION}"
    gvm pkgset create "${PROJECT}"
@@ -91,4 +86,4 @@ To get started, you will need to:
 1. Create a new repo with this template
 2. Replace all instances of PROJECT_NAME,
    BIN_NAME, l50, and goproject found throughout the codebase
-3. Customize as needed to meet your needs
+3. Customize as needed
