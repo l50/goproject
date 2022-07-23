@@ -16,6 +16,19 @@ that nature.
 
 ## Dependencies
 
+- [Install homebrew](https://brew.sh/):
+
+  ```bash
+  # Linux
+  sudo apt-get update
+  sudo apt-get install -y build-essential procps curl file git
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+  # macOS
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  ```
+
 - [Install gvm](https://github.com/moovweb/gvm):
 
   ```bash
