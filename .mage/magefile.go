@@ -75,7 +75,8 @@ func RunPreCommit() error {
 	_, err := script.Exec(cmd).String()
 
 	if err != nil {
-		return fmt.Errorf(color.RedString("failed to run pre-commit hooks: %v", err))
+		return fmt.Errorf(color.RedString(
+			"failed to run pre-commit hooks: %v", err))
 	}
 
 	return nil
