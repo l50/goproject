@@ -3,12 +3,13 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"path/filepath"
 
 	"github.com/fatih/color"
-	utils "github.com/l50/goutils"
+	goutils "github.com/l50/goutils"
 
 	// mage utility functions
 	"github.com/magefile/mage/mg"
@@ -23,17 +24,17 @@ func init() {
 func InstallDeps() error {
 	fmt.Println(color.YellowString("Installing dependencies."))
 
-	if err := utils.Tidy(); err != nil {
+	if err := goutils.Tidy(); err != nil {
 		return fmt.Errorf(color.RedString(
 			"failed to install dependencies: %v", err))
 	}
 
-	if err := utils.InstallGoPCDeps(); err != nil {
+	if err := goutils.InstallGoPCDeps(); err != nil {
 		return fmt.Errorf(color.RedString(
 			"failed to install pre-commit dependencies: %v", err))
 	}
 
-	if err := utils.InstallVSCodeModules(); err != nil {
+	if err := goutils.InstallVSCodeModules(); err != nil {
 		return fmt.Errorf(color.RedString(
 			"failed to install vscode-go modules: %v", err))
 	}
@@ -46,7 +47,7 @@ func InstallPreCommitHooks() error {
 	mg.Deps(InstallDeps)
 
 	fmt.Println(color.YellowString("Installing pre-commit hooks."))
-	if err := utils.InstallPCHooks(); err != nil {
+	if err := goutils.InstallPCHooks(); err != nil {
 		return err
 	}
 
@@ -58,18 +59,18 @@ func RunPreCommit() error {
 	mg.Deps(InstallDeps)
 
 	fmt.Println(color.YellowString("Updating pre-commit hooks."))
-	if err := utils.UpdatePCHooks(); err != nil {
+	if err := goutils.UpdatePCHooks(); err != nil {
 		return err
 	}
 
 	fmt.Println(color.YellowString(
 		"Clearing the pre-commit cache to ensure we have a fresh start."))
-	if err := utils.ClearPCCache(); err != nil {
+	if err := goutils.ClearPCCache(); err != nil {
 		return err
 	}
 
 	fmt.Println(color.YellowString("Running all pre-commit hooks locally."))
-	if err := utils.RunPCHooks(); err != nil {
+	if err := goutils.RunPCHooks(); err != nil {
 		return err
 	}
 
@@ -105,6 +106,59 @@ func UpdateMirror(tag string) error {
 		tag))
 	if err != nil {
 		return fmt.Errorf(color.RedString("failed to update pkg.go.dev: %w", err))
+	}
+
+	return nil
+}
+
+// Compile Generates a binary (for the input OS if `osCli` is set)
+// or set of binaries associated with the project.
+//
+// Examples:
+//
+// ```bash
+// # macOS
+// ./magefile compile darwin
+// # windows, linux, darwin
+// ./magefile compile all
+// ```
+//
+func Compile(ctx context.Context, osCli string, binName string) error {
+	var operatingSystems []string
+	binDir := "."
+
+	if osCli == "all" {
+		operatingSystems = []string{"windows", "linux", "darwin"}
+	} else {
+		operatingSystems = []string{osCli}
+	}
+
+	if binName == "" {
+		return fmt.Errorf(color.RedString(
+			"failed to input binName! The current value is %s. "+
+				"Try again using this format: ./magefile compile darwin myBin", binName))
+	}
+
+	// Create bin/ if it doesn't already exist
+	if _, err := os.Stat(binDir); os.IsNotExist(err) {
+		if err := os.Mkdir(binDir, os.ModePerm); err != nil {
+			return fmt.Errorf(color.RedString(
+				"failed to create bin dir: %v", err))
+		}
+	}
+
+	for _, os := range operatingSystems {
+		fmt.Printf(color.YellowString("Compiling %s bin for %s OS, please wait.\n", binName, os))
+		env := map[string]string{
+			"GOOS":   os,
+			"GOARCH": "amd64",
+		}
+
+		binPath := filepath.Join(binDir, fmt.Sprintf("%s-%s", binName, os))
+
+		if err := sh.RunWith(env, "go", "build", "-o", binPath); err != nil {
+			return fmt.Errorf(color.RedString("failed to create %s bin: %v", binPath, err))
+		}
 	}
 
 	return nil
