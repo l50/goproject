@@ -5,6 +5,7 @@
 [![Tests](https://github.com/l50/goproject/actions/workflows/tests.yaml/badge.svg)](https://github.com/l50/goproject/actions/workflows/tests.yaml)
 [![🚨 CodeQL Analysis](https://github.com/l50/goproject/actions/workflows/codeql-analysis.yaml/badge.svg)](https://github.com/l50/goproject/actions/workflows/codeql-analysis.yaml)
 [![🚨 Semgrep Analysis](https://github.com/l50/goproject/actions/workflows/semgrep.yaml/badge.svg)](https://github.com/l50/goproject/actions/workflows/semgrep.yaml)
+[![Pre-commit auto-update](https://github.com/l50/goproject/actions/workflows/pre-commit-update.yml/badge.svg)](https://github.com/l50/goproject/actions/workflows/pre-commit-update.yml)
 [![Coverage Status](https://coveralls.io/repos/github/l50/goproject/badge.svg?branch=main)](https://coveralls.io/github/l50/goproject?branch=main)
 
 This repo provides a base template for a new go project.
