@@ -1,5 +1,5 @@
 ---
-name: Pre-commit auto-update
+name: Pre-commit
 on:
   pull_request:
   push:
@@ -42,9 +42,6 @@ jobs:
 
       - name: Run pre-commit autoupdate action
         uses: browniebroke/pre-commit-autoupdate-action@main
-
-      - name: Run pre-commit
-        uses: pre-commit/action@v3.0.0
 
       - name: Create Pull Request with updates
         uses: peter-evans/create-pull-request@v4
