@@ -1,7 +1,7 @@
 # Go Project Template
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/l50/goproject)](https://goreportcard.com/report/github.com/l50/goproject)
-[![License](http://img.shields.io/:license-mit-blue.svg)](https://github.com/l50/goproject/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/l50/goproject?label=License&style=flat&color=blue&logo=github)](https://github.com/l50/goproject/blob/master/LICENSE)
 [![Tests](https://github.com/l50/goproject/actions/workflows/tests.yaml/badge.svg)](https://github.com/l50/goproject/actions/workflows/tests.yaml)
 [![🚨 CodeQL Analysis](https://github.com/l50/goproject/actions/workflows/codeql-analysis.yaml/badge.svg)](https://github.com/l50/goproject/actions/workflows/codeql-analysis.yaml)
 [![🚨 Semgrep Analysis](https://github.com/l50/goproject/actions/workflows/semgrep.yaml/badge.svg)](https://github.com/l50/goproject/actions/workflows/semgrep.yaml)
