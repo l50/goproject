@@ -64,11 +64,6 @@ that nature.
 2. (Optional) If you installed gvm, create golang pkgset specifically for this project:
 
    ```bash
-   VERSION='1.18'
-   PROJECT=goproject
-
-   gvm install "go${VERSION}"
-   gvm use "go${VERSION}"
    gvm pkgset create "${PROJECT}"
    gvm pkgset use "${PROJECT}"
    ```
