@@ -40,7 +40,7 @@ that nature.
 - [Install golang](https://go.dev/):
 
   ```bash
-  gvm install go1.18
+  source .gvm
   ```
 
 - [Install pre-commit](https://pre-commit.com/):
@@ -73,22 +73,16 @@ that nature.
    gvm pkgset use "${PROJECT}"
    ```
 
-3. Generate the `magefile` binary:
+3. Install pre-commit hooks and dependencies:
 
    ```bash
-   mage -d .mage/ -compile ../magefile
+   mage installPreCommitHooks
    ```
 
-4. Install pre-commit hooks and dependencies:
+4. Update and run pre-commit hooks locally:
 
    ```bash
-   ./magefile installPreCommitHooks
-   ```
-
-5. Update and run pre-commit hooks locally:
-
-   ```bash
-   ./magefile runPreCommit
+   mage runPreCommit
    ```
 
 ---
