@@ -1,20 +1,20 @@
 #!/bin/bash
 set -ex
 
-pkg=$(go list ./...)
+pkg=$(go list .)
 for dir in */; do
-    if [[ "${dir}" != ".hooks" ]] \
+    if [[ "${dir}" != ".hooks/" ]] \
                               && [[ "${dir}" != "bin/" ]] \
-                              && [[ "${dir}" != "config/" ]] \
                               && [[ "${dir}" != "cmd/" ]] \
-                              && [[ "${dir}" != "docs/" ]] \
-                              && [[ "${dir}" != "dist/" ]] \
-                              && [[ "${dir}" != "images/" ]] \
+                              && [[ "${dir}" != "config/" ]] \
+                              && [[ "${dir}" != "deployments/" ]] \
                               && [[ "${dir}" != "files/" ]] \
+                              && [[ "${dir}" != "images/" ]] \
                               && [[ "${dir}" != "logs/" ]] \
                               && [[ "${dir}" != "magefiles/" ]] \
-                              && [[ "${dir}" != "templates/" ]] \
-                              && [[ "${dir}" != "resources/" ]]; then
+                              && [[ "${dir}" != "modules/" ]] \
+                              && [[ "${dir}" != "resources/" ]] \
+                              && [[ "${dir}" != "templates/" ]]; then
         go vet "${pkg}/${dir}"
     fi
 done
