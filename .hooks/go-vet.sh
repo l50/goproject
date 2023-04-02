@@ -1,13 +1,16 @@
 #!/bin/bash
 set -ex
 
-pkg=$(go list .)
-for dir in */; do
+pkgs=$(go list ./...)
+
+for pkg in $pkgs; do
+    dir="$(basename "$pkg")/"
     if [[ "${dir}" != ".hooks/" ]] \
+                              && [[ "${dir}" != ".github/" ]] \
                               && [[ "${dir}" != "bin/" ]] \
-                              && [[ "${dir}" != "cmd/" ]] \
                               && [[ "${dir}" != "config/" ]] \
                               && [[ "${dir}" != "deployments/" ]] \
+                              && [[ "${dir}" != "docs/" ]] \
                               && [[ "${dir}" != "files/" ]] \
                               && [[ "${dir}" != "images/" ]] \
                               && [[ "${dir}" != "logs/" ]] \
