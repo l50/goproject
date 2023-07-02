@@ -40,7 +40,7 @@ jobs:
           path-to-profile: coverage-all.out
 
       - name: Report failure
-        uses: nashmaniac/create-issue-action@b0c9250ca328a30c2989c7358bc4833f77953af2 # v1.1
+        uses: nashmaniac/create-issue-action@6814b79f58a9e25070c226b0c847e67b0c06efdd # v1.2
         # Only report failures of pushes
         # (PRs have are visible through the Checks
         # section) to the default branch
