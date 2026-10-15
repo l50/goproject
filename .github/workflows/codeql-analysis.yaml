@@ -32,7 +32,7 @@ jobs:
       # which autobuild skips, so build it explicitly.
       - name: Build
         working-directory: magefiles
-        run: go build -tags mage ./...
+        run: go run github.com/magefile/mage -d . -compile "${RUNNER_TEMP}/mage"
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@489225d82a57396c6f426a40e66d461b16b3461d # v2

@@ -12,6 +12,11 @@ if [[ -z "${TESTS_TO_RUN}" ]]; then
     exit 1
 fi
 
+if [[ -z "$(go list ./... 2> /dev/null)" ]]; then
+    echo "No Go packages to test"
+    exit 0
+fi
+
 if [[ "${TESTS_TO_RUN}" == 'coverage' ]]; then
     go test -v -race -failfast \
         -tags=integration -coverprofile=coverage-all.out ./...
