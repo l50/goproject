@@ -28,8 +28,11 @@ jobs:
         with:
           languages: ${{ matrix.language }}
 
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@489225d82a57396c6f426a40e66d461b16b3461d # v2
+      # The only Go code lives in magefiles/ behind the mage build tag,
+      # which autobuild skips, so build it explicitly.
+      - name: Build
+        working-directory: magefiles
+        run: go build -tags mage ./...
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@489225d82a57396c6f426a40e66d461b16b3461d # v2

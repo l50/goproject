@@ -19,7 +19,7 @@ jobs:
           go-version: 1.19
 
       - name: Install homebrew
-        uses: homebrew/actions/setup-homebrew@master
+        uses: homebrew/actions/setup-homebrew@main
 
       - name: Install brew dependencies
         run: |
