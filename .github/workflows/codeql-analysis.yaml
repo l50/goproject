@@ -8,6 +8,9 @@ jobs:
   codeql:
     name: Evaluate code for vulnerabilities
     runs-on: ubuntu-latest
+    # The only Go code lives in magefiles/ behind the mage build tag.
+    env:
+      GOFLAGS: -tags=mage
 
     permissions:
       actions: read
@@ -28,12 +31,8 @@ jobs:
         with:
           languages: ${{ matrix.language }}
 
-      # The only Go code lives in magefiles/ behind the mage build tag,
-      # which autobuild skips, so compile it explicitly (-a so the CodeQL
-      # tracer sees every compile instead of build-cache hits).
-      - name: Build
-        working-directory: magefiles
-        run: go test -a -tags mage -c -o /dev/null .
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@489225d82a57396c6f426a40e66d461b16b3461d # v2
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@489225d82a57396c6f426a40e66d461b16b3461d # v2
