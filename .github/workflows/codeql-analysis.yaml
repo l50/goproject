@@ -29,10 +29,11 @@ jobs:
           languages: ${{ matrix.language }}
 
       # The only Go code lives in magefiles/ behind the mage build tag,
-      # which autobuild skips, so build it explicitly.
+      # which autobuild skips, so compile it explicitly (-a so the CodeQL
+      # tracer sees every compile instead of build-cache hits).
       - name: Build
         working-directory: magefiles
-        run: go run github.com/magefile/mage -d . -compile "${RUNNER_TEMP}/mage"
+        run: go test -a -tags mage -c -o /dev/null .
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@489225d82a57396c6f426a40e66d461b16b3461d # v2
