@@ -19,7 +19,7 @@ jobs:
           go-version: 1.19
 
       - name: Install homebrew
-        uses: homebrew/actions/setup-homebrew@master
+        uses: homebrew/actions/setup-homebrew@main
 
       - name: Install brew dependencies
         run: |
@@ -35,6 +35,7 @@ jobs:
           bash .hooks/go-unit-tests.sh coverage
 
       - name: Send the coverage output
+        if: hashFiles('coverage-all.out') != ''
         uses: shogo82148/actions-goveralls@df920a6a2468668dfcf71a0b43817f89eaa5ea04 # v1
         with:
           path-to-profile: coverage-all.out

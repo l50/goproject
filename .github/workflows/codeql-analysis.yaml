@@ -8,6 +8,9 @@ jobs:
   codeql:
     name: Evaluate code for vulnerabilities
     runs-on: ubuntu-latest
+    # The only Go code lives in magefiles/ behind the mage build tag.
+    env:
+      GOFLAGS: -tags=mage
 
     permissions:
       actions: read
