@@ -39,7 +39,7 @@ jobs:
 
       - name: Send the coverage output
         if: hashFiles('coverage-all.out') != ''
-        uses: shogo82148/actions-goveralls@df920a6a2468668dfcf71a0b43817f89eaa5ea04 # v1
+        uses: shogo82148/actions-goveralls@daabb2902148216a0b13c82107a6e67ed97f796e # v1
         with:
           path-to-profile: coverage-all.out
 
