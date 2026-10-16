@@ -5,34 +5,37 @@ on:
   push:
     branches: [main]
 
+permissions: {}
+
 jobs:
-  tests:
-    name: Run tests - includes pre-commit hooks and determining code coverage %
+  go-ci:
+    uses: CowDogMoo/renovate-config/.github/workflows/go-ci.yaml@main
+    permissions:
+      contents: read
+    with:
+      pre-commit: false
+      test-command: bash .hooks/go-unit-tests.sh coverage
+      coverage-file: ""
+
+  coveralls:
+    name: Coveralls
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Set up git repository
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Set up Go
-        uses: actions/setup-go@fac708d6674e30b6ba41289acaab6d4b75aa0753 # v4
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
-          go-version: 1.19
-
-      - name: Install homebrew
-        uses: homebrew/actions/setup-homebrew@main
-
-      - name: Install brew dependencies
-        run: |
-          brew install pre-commit
-
-      - name: Set git config
-        run: |
-          git config --global user.name "John Doe"
-          git config --global user.email johndoe@example.com
+          go-version-file: go.mod
+          check-latest: true
 
       - name: Generate the coverage output
-        run: |
-          bash .hooks/go-unit-tests.sh coverage
+        run: bash .hooks/go-unit-tests.sh coverage
 
       - name: Send the coverage output
         if: hashFiles('coverage-all.out') != ''
@@ -40,12 +43,18 @@ jobs:
         with:
           path-to-profile: coverage-all.out
 
+  report-failure:
+    name: Report failure
+    needs: [go-ci, coveralls]
+    # Only report failures of pushes to the default branch; PR failures are
+    # visible through the Checks section.
+    if: failure() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
       - name: Report failure
         uses: nashmaniac/create-issue-action@6814b79f58a9e25070c226b0c847e67b0c06efdd # v1.2
-        # Only report failures of pushes
-        # (PRs have are visible through the Checks
-        # section) to the default branch
-        if: failure() && github.event_name == 'push' && github.ref == 'refs/heads/main'
         with:
           title: 🐛 Coverage report failed for ${{ github.sha }}
           base: main
