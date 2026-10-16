@@ -5,7 +5,7 @@ go 1.27.2
 require (
 	github.com/fatih/color v1.19.0
 	github.com/l50/goutils v1.3.1
-	github.com/magefile/mage v1.15.0
+	github.com/magefile/mage v1.17.2
 )
 
 require (
