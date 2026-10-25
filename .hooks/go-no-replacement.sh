@@ -10,6 +10,7 @@ fi
 
 # Match the repo path as the source of a replace directive, in both the
 # single-line form and inside a replace ( ... ) block.
+# shellcheck disable=SC2016 # literal regex metacharacters, not expansions
 REPO_RE=$(printf '%s' "${REPO}" | sed 's/[][\.*^$()+?{}|]/\\&/g')
 if grep -E "^[[:space:]]*(replace[[:space:]]+)?${REPO_RE}([[:space:]]+v[^[:space:]]+)?[[:space:]]+=>" "$@" 2>&1; then
     echo "ERROR: Don't commit a replacement in go.mod!"
