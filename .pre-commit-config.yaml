@@ -102,8 +102,9 @@ repos:
 
       - id: prettier
         name: Run prettier
-        entry: .hooks/prettier.sh
-        language: script
+        entry: prettier --write --ignore-unknown
+        language: node
+        additional_dependencies: ["prettier@3.9.10"]
         types_or: [json, yaml]
 
       # Manual-only: CI runs `pre-commit run --all-files`, which ignores the
