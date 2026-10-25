@@ -1,11 +1,45 @@
-# File created for debugging with vscode
-mage_output_file.go
-
-# mage binary
-magefile
-
-# Code coverage output file
+# Code coverage output files
 coverage-all.out
+coverage.out
+coverage.html
+*.cov
 
 # Distribution directory for binaries
 dist/
+
+# Generated binaries (local development)
+/goproject
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Generated logs
+*.log
+
+# Custom attributes files created by macOS
+.DS_Store
+
+# Taskfile
+.task
+
+# Pre-commit artifacts
+node_modules
+
+# Test output files (but keep *_test.go files!)
+*.test
+test-results/
+testdata/tmp/
+
+# Secrets and environment files
+.secrets
+.env
+.env.*
+*.key
+*.pem
+
+# Tool version files (machine-specific)
+.tool-versions
+
+# Go vendor directory
+vendor/

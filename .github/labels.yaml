@@ -1,17 +1,29 @@
 ---
 # Area
-- name: area/github
-  color: "72ccf3"
+- name: area/go
+  color: "00ADD8" # go blue
   description: >-
-    Changes made to github actions
+    Changes made to Go source code (cmd/, config/, logging/)
+
+- name: area/docs
+  color: "8fbc8f" # light green
+  description: >-
+    Changes made to project documentation
+
+- name: area/github
+  color: "72ccf3" # light blue
+  description: >-
+    Changes made to GitHub Actions workflows
+
+- name: area/taskfile
+  color: "7BD7E0" # cyan
+  description: >-
+    Changes made to Taskfile configurations
+
 - name: area/pre-commit
-  color: "BC9BE3"
+  color: "BC9BE3" # lavender
   description: >-
     Changes made to pre-commit hooks
-- name: area/go
-  color: "7BD7E0"
-  description: >-
-    Changes made to go resources
 
 # Renovate
 - name: renovate/container
