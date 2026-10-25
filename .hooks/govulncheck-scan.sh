@@ -5,16 +5,16 @@ set -e
 if ! command -v govulncheck &> /dev/null; then
     echo "govulncheck is not installed. Installing..."
     if ! go install golang.org/x/vuln/cmd/govulncheck@latest; then
-        echo "Warning: Failed to install govulncheck, skipping vulnerability scan"
-        exit 0
+        echo "Error: Failed to install govulncheck"
+        exit 1
     fi
     echo "govulncheck installed successfully"
 fi
 
 # Verify govulncheck is now available
 if ! command -v govulncheck &> /dev/null; then
-    echo "Warning: govulncheck not found in PATH after installation, skipping scan"
-    exit 0
+    echo "Error: govulncheck not found in PATH after installation"
+    exit 1
 fi
 
 # Vulnerabilities with no fix available (upstream hasn't released a patch).
@@ -24,6 +24,12 @@ IGNORED_VULNS=()
 # Run govulncheck vulnerability scan
 echo "Running govulncheck vulnerability scan..."
 if ! output=$(govulncheck ./... 2>&1); then
+    if ! echo "$output" | grep -q "^Vulnerability #"; then
+        echo "❌ govulncheck failed:"
+        echo "$output"
+        exit 1
+    fi
+
     # Filter out ignored vulnerabilities to check if any actionable ones remain
     filtered_output="$output"
     for vuln in "${IGNORED_VULNS[@]}"; do

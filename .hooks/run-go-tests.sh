@@ -72,8 +72,11 @@ run_tests() {
         done
 
         # Remove duplicate package directories
-        IFS=$'\n' read -r -a pkg_dirs <<< "$(printf '%s\n' "${pkg_dirs[@]}" | sort -u)"
-        unset IFS
+        local unique_dirs=()
+        while IFS= read -r dir; do
+            unique_dirs+=("$dir")
+        done < <(printf '%s\n' "${pkg_dirs[@]}" | sort -u)
+        pkg_dirs=("${unique_dirs[@]}")
 
         for dir in "${pkg_dirs[@]}"; do
             if [[ -n "$dir" ]]; then

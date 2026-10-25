@@ -18,8 +18,7 @@ check_licenses() {
     # Decide action based on input
     if [[ $action == "check_forbidden" ]]; then
         echo "Checking for forbidden licenses..."
-        output=$(go-licenses check ./... 2> /dev/null)
-        if [[ "${output}" == *"ERROR: forbidden license found"* ]]; then
+        if ! go-licenses check ./...; then
             echo "Forbidden licenses found. Please remove them."
             exit 1
         else
@@ -27,7 +26,7 @@ check_licenses() {
         fi
     elif [[ $action == "output_csv" ]]; then
         echo "Outputting licenses to csv..."
-        status=go-licenses csv ./... 2> /dev/null
+        go-licenses csv ./...
     elif [[ $action == "vendor" ]]; then
         echo "Vendoring dependencies..."
         run_vendor
