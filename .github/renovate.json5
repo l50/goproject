@@ -4,4 +4,41 @@
     'github>CowDogMoo/renovate-config',
     'github>CowDogMoo/renovate-config:go',
   ],
+  // Strict filtering drops candidate releases whose own go.mod demands a
+  // newer Go than ours, so a bump cannot break CI by raising the toolchain.
+  // It cannot see pseudo-versions, hence the indirect digest exclusion below.
+  constraintsFiltering: 'strict',
+  osvVulnerabilityAlerts: true,
+  packageRules: [
+    {
+      matchManagers: ['gomod'],
+      matchDepTypes: ['indirect'],
+      enabled: true,
+    },
+    {
+      // Indirect deps only get minor/patch bumps. A Go major changes the
+      // module path (/v2, .v5) and nothing here imports the new path, so
+      // `go mod tidy` reverts the bump. Digest bumps of pseudo-versioned
+      // modules bypass constraintsFiltering and can drag in a newer Go.
+      matchManagers: ['gomod'],
+      matchDepTypes: ['indirect'],
+      matchUpdateTypes: ['major', 'digest'],
+      enabled: false,
+    },
+    {
+      // Patch bumps of the `go` directive automerge via the shared preset;
+      // minor and major bumps wait for a human since they raise the floor
+      // for every consumer. separateMinorPatch keeps a security patch from
+      // sitting behind that manual PR.
+      matchManagers: ['gomod'],
+      matchDepTypes: ['golang'],
+      separateMinorPatch: true,
+    },
+    {
+      matchManagers: ['gomod'],
+      matchDepTypes: ['golang'],
+      matchUpdateTypes: ['minor', 'major'],
+      automerge: false,
+    },
+  ],
 }

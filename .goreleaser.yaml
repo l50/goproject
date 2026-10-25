@@ -1,8 +1,79 @@
 ---
+version: 2
+
+# Snapshot configuration for non-release builds
+# Use git describe format for version strings
+snapshot:
+  version_template: "{{ .Version }}-next"
+
+release:
+  draft: false
+  prerelease: auto
+  name_template: "v{{ .Version }}"
+  footer: |
+    **Full changelog**: https://github.com/l50/goproject/compare/{{ .PreviousTag }}...{{ .Tag }}
+
+changelog:
+  sort: asc
+  use: github
+  groups:
+    - title: Features
+      regexp: '^.*?feat(\(.+\))??!?:.+$'
+      order: 0
+    - title: Bug fixes
+      regexp: '^.*?fix(\(.+\))??!?:.+$'
+      order: 1
+    - title: Performance
+      regexp: '^.*?perf(\(.+\))??!?:.+$'
+      order: 2
+    - title: Dependencies
+      regexp: '^.*?(deps|chore\(deps\))(\(.+\))??!?:.+$'
+      order: 3
+    - title: Other
+      order: 999
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^style:"
+      - "^ci:"
+      - Merge pull request
+      - Merge branch
+
 builds:
-  - id: "goutils"
-    # This is a library - there are no binaries to build
-    skip: true
+  - id: "goproject"
+
+    binary: goproject
+
+    main: ./cmd/goproject
+
+    # Inject version info via ldflags
+    # Use {{.Summary}} to get git describe format (e.g., v3.0.0-1-gc1b0525)
+    ldflags:
+      - -s -w
+      - -X main.version={{.Summary}}
+      - -X main.commit={{.ShortCommit}}
+      - -X main.date={{.Date}}
+
+    goos:
+      - linux
+      - darwin
+      # - windows
+
+    goarch:
+      - amd64
+      - arm
+      - arm64
+
+    # GOARM to build for when GOARCH is arm.
+    goarm:
+      - 6
+      - 7
+
+    # GOAMD64 to build when GOARCH is amd64.
+    goamd64:
+      - v2
+      - v3
 
     hooks:
       pre: go mod tidy

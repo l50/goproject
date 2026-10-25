@@ -1,23 +1,48 @@
 ---
 name: 🚨 Semgrep Analysis
 on:
-  push:
+  merge_group:
   pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+  push:
+    branches:
+      - main
+  schedule:
+    # Run once a week (see https://crontab.guru)
+    - cron: "0 0 * * 0"
+  workflow_dispatch:
+
+# Cancel any in-progress job when a new workflow is triggered
+concurrency:
+  cancel-in-progress: true
+  group: pre-commit-${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  contents: read
 
 jobs:
   semgrep:
-    name: Evaluate code for vulnerabilities
+    name: 🚨 Semgrep Analysis
     runs-on: ubuntu-latest
-    # Skip any PR created by dependabot to avoid permission issues
-    if: (github.actor != 'dependabot[bot]')
+    container:
+      image: semgrep/semgrep:1.181.0
 
     steps:
-      - name: Set up git repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-
-      - uses: returntocorp/semgrep-action@713efdd345f3035192eaa63f56867b88e63e4e5d # v1
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          config: >- # more at semgrep.dev/explore
-            p/security-audit
-            p/secrets
-            p/golang
+          persist-credentials: false
+
+      - name: Run Semgrep analysis
+        run: |
+          semgrep scan --error \
+            --config p/security-audit \
+            --config p/secrets \
+            --config p/ci \
+            --config p/supply-chain \
+            --config p/golang

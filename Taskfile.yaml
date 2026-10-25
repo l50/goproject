@@ -1,0 +1,22 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+
+vars:
+  BINARY_NAME: goproject
+  CMD_PATH: ./cmd/goproject
+
+includes:
+  go:
+    taskfile: "https://raw.githubusercontent.com/CowDogMoo/taskfile-templates/main/go/Taskfile.yaml"
+    vars:
+      BINARY_NAME: goproject
+      CMD_PATH: ./cmd/goproject
+  pre-commit:
+    taskfile: "https://raw.githubusercontent.com/CowDogMoo/taskfile-templates/main/pre-commit/Taskfile.yaml"
+
+tasks:
+  default:
+    desc: Build, test, and clean
+    cmds:
+      - task: go:default

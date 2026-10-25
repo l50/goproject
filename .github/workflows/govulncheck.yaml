@@ -1,0 +1,59 @@
+---
+name: Govulncheck
+on:
+  # Runs on every PR (no paths filter) so it can be a required status check:
+  # a path-filtered required check never reports on non-dependency PRs and
+  # would block them from merging forever.
+  merge_group:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+  push:
+    branches:
+      - main
+    paths:
+      - go.mod
+      - go.sum
+  # Catch newly published advisories against unchanged code. This runs on a
+  # schedule rather than in pre-commit so a fresh CVE reddens one scheduled run
+  # instead of every open PR.
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+concurrency:
+  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  contents: read
+
+jobs:
+  govulncheck:
+    name: Run govulncheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout git repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7
+        with:
+          go-version-file: go.mod
+          check-latest: true
+
+      - name: Install govulncheck
+        run: |
+          go install golang.org/x/vuln/cmd/govulncheck@latest
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+
+      # Reuses the same script as local runs so the ignore list for
+      # vulnerabilities with no upstream fix lives in exactly one place.
+      - name: Run govulncheck
+        run: .hooks/govulncheck-scan.sh

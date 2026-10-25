@@ -1,26 +1,27 @@
 ---
+area/go:
+  - changed-files:
+      - any-glob-to-any-file: "cmd/**/*.go"
+      - any-glob-to-any-file: "config/**/*.go"
+      - any-glob-to-any-file: "logging/**/*.go"
+      - any-glob-to-any-file: "go.mod"
+      - any-glob-to-any-file: "go.sum"
+      - any-glob-to-any-file: ".goreleaser.yaml"
+
+area/docs:
+  - changed-files:
+      - any-glob-to-any-file: "README.md"
+      - any-glob-to-any-file: "docs/**/*"
+
 area/github:
   - changed-files:
-      - any-glob-to-any-file:
-          - ".github/**/*"
+      - any-glob-to-any-file: ".github/**/*"
 
 area/pre-commit:
   - changed-files:
-      - any-glob-to-any-file:
-          - ".pre-commit-config.yaml"
-          - ".hooks/**/*"
+      - any-glob-to-any-file: .pre-commit-config.yaml
+      - any-glob-to-any-file: .hooks/**/*
 
-area/go:
+area/taskfile:
   - changed-files:
-      - any-glob-to-any-file:
-          - "pkg/**/*"
-          - "cmd/**/*"
-          - "*.go"
-          - "magefiles/*"
-          - "go.mod"
-          - "go.sum"
-
-area/mage:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "magefiles/*"
+      - any-glob-to-any-file: "Taskfile.yaml"
