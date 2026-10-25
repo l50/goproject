@@ -79,6 +79,18 @@ func TestVersionCmd(t *testing.T) {
 	}
 }
 
+func TestUnknownSubcommand(t *testing.T) {
+	_, _, err := execute(t, "verison")
+	if err == nil {
+		t.Fatal("expected an error for a mistyped subcommand")
+	}
+	for _, want := range []string{`unknown command "verison"`, "Did you mean this?", "version"} {
+		if !strings.Contains(err.Error(), want) {
+			t.Errorf("error %q missing %q", err, want)
+		}
+	}
+}
+
 func TestCompletionCmd(t *testing.T) {
 	tests := []struct {
 		shell   string

@@ -102,7 +102,7 @@ repos:
         name: Run prettier
         entry: .hooks/prettier.sh
         language: script
-        types: [json, yaml]
+        types_or: [json, yaml]
 
       # Manual-only: CI runs `pre-commit run --all-files`, which ignores the
       # `files` filter below and so ran this on every PR. A newly published

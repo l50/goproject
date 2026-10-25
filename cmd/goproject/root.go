@@ -32,7 +32,6 @@ Configuration precedence (highest to lowest):
   3. Configuration file ($XDG_CONFIG_HOME/goproject/config.yaml)
   4. Built-in defaults`,
 		Version:           version,
-		Args:              cobra.NoArgs,
 		SilenceUsage:      true,
 		PersistentPreRunE: initConfig,
 	}
