@@ -104,7 +104,7 @@ repos:
         name: Run prettier
         entry: prettier --write --ignore-unknown
         language: node
-        additional_dependencies: ["prettier@3.9.10"]
+        additional_dependencies: ["prettier@3.10.0"]
         types_or: [json, yaml]
 
       # Manual-only: CI runs `pre-commit run --all-files`, which ignores the
